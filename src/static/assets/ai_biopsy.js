@@ -3,7 +3,7 @@ const maxImagesPermitted = 7;
 const baseApiUrl = 'api'
 // End Env variables
 
-let token = getCookie('cnn-smoothie-auth');
+let token = getCookie('ai-biopsy-auth');
 checkTokenAndRedirectIfEmpty();
 
 setInterval(function(){
@@ -11,7 +11,7 @@ setInterval(function(){
 }, 5000);
 
 function checkTokenAndRedirectIfEmpty() {
-    token = getCookie('cnn-smoothie-auth');
+    token = getCookie('ai-biopsy-auth');
     if (window.location.pathname !== '/login' && token === '') {
         window.location.href = '/login';
     }

@@ -63,7 +63,7 @@ def login():
     if username and users_dict[username] == password:
         response = make_response()
         uuid = str(myuuid.uuid4())
-        response.set_cookie('cnn-smoothie-auth', uuid, max_age=3600)
+        response.set_cookie('ai-biopsy-auth', uuid, max_age=3600)
         return response
     return jsonify({}), 401
 
@@ -112,12 +112,12 @@ def upload_image():
     output_filename = 'output_' + request_id + '.txt'
     output_file = os.path.join(OUTPUT_DIR, output_filename)
 
-    # 5. Run cnn-smoothie
+    # 5. Run ai-biopsy
     python_command='python3 ' + os.environ['PREDICT_DIR'] + '/predict.py v1 ' + RESULT_DIR + ' ' + request_dir + ' ' + output_file + ' 2'
     print(python_command)
     os.system(python_command)
 
-    # 6. Parse cnn-smoothie Results
+    # 6. Parse ai-biopsy Results
     image_results = list(csv.reader(open(output_file, 'r', encoding='utf8'), delimiter='\t'))
 
     # ==================#
