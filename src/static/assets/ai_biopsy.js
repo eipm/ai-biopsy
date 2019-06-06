@@ -1,5 +1,5 @@
 // Env variables
-const maxImagesPermitted = 7;
+const maxImagesPermitted = 100;
 const baseApiUrl = 'api'
 // End Env variables
 
