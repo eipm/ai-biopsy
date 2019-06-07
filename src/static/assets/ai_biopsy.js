@@ -222,8 +222,8 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
                     <div class="poor">
                         <div class="good bar"></div>
                     </div>
-                    <div class="legend-item"><div class="legend-marker good"></div>aggresive: <span class="good-text"></span></div>
-                    <div class="legend-item"><div class="legend-marker poor"></div>nonAggresive: <span class="poor-text"></span></div>
+                    <div class="legend-item"><div class="legend-marker good"></div>Aggresive: <span class="good-text"></span></div>
+                    <div class="legend-item"><div class="legend-marker poor"></div>Non Aggresive: <span class="poor-text"></span></div>
                 </div>
             </div>`;
         imagesPlaceholder.appendChild(imagePlaceholder);
