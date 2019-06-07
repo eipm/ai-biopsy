@@ -14,7 +14,7 @@ from os import walk
 session = tf.Session()
 
 def get_test_images(mypath):
-	return [mypath + '/' + f for f in listdir(mypath) if isfile(join(mypath, f)) and f.find('.png') != -1]
+	return [mypath + '/' + f for f in listdir(mypath) if isfile(join(mypath, f)) and f.find('.jpg') != -1]
 
 def transform_img_fn(path_list):
     out = []
