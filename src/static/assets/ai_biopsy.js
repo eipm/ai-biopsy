@@ -145,7 +145,7 @@ function postFormData(formData, baseApiUrl) {
                 const goodText = card.getElementsByClassName('good-text')[0];
                 const poorText = card.getElementsByClassName('poor-text')[0];
                 const goodPercentage = (response[fileName].aggresive * 100).toFixed(2);
-                const poorPercentage = (response[fileName].non-aggresive * 100).toFixed(2);
+                const poorPercentage = (response[fileName].nonAggresive * 100).toFixed(2);
                 bar.setAttribute('style', `width:${goodPercentage}%;`);
                 bar.innerHTML = `&nbsp;`;
                 goodText.innerHTML = `${goodPercentage}%`;
@@ -223,7 +223,7 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
                         <div class="good bar"></div>
                     </div>
                     <div class="legend-item"><div class="legend-marker good"></div>aggresive: <span class="good-text"></span></div>
-                    <div class="legend-item"><div class="legend-marker poor"></div>non-aggresive: <span class="poor-text"></span></div>
+                    <div class="legend-item"><div class="legend-marker poor"></div>nonAggresive: <span class="poor-text"></span></div>
                 </div>
             </div>`;
         imagesPlaceholder.appendChild(imagePlaceholder);

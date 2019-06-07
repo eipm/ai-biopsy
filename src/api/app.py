@@ -129,7 +129,7 @@ def upload_image():
         filename = os.path.splitext(filepath)[0]
         for saved_file_name, initital_file_name in images_dict.items():
             if saved_file_name.lower() in [("{}.{}".format(filename, ext)).lower() for ext in ALLOWED_EXTENSIONS]:
-                response_dict[initital_file_name] = { 'aggresive': image_result[1], 'non-aggresive': image_result[2] }
+                response_dict[initital_file_name] = { 'aggresive': image_result[1], 'nonAggresive': image_result[2] }
                 break
 
     return jsonify(response_dict), 200
