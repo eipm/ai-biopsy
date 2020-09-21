@@ -235,14 +235,6 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
                 cornerstone.displayImage(cardImage, image);
             });
 
-            // const imageId = 'example://1';
-            // const element = document.getElementById('dicomImage');
-            // cornerstone.enable(element);
-            // cornerstone.loadImage(imageId).then(function(image) {
-            //     cornerstone.displayImage(element, image);
-            // });
-
-
         } else {
             cardImage.innerHTML = `<img alt="${file.name}" width="330px" />`;
         }
