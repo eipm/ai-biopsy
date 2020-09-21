@@ -9,6 +9,8 @@ import cv2
 import glob
 import ntpath
 import datetime
+import numpy as np
+import png, pydicom
 from ast import literal_eval
 
 # Relative Imports
@@ -20,7 +22,7 @@ OUTPUT_DIR = '/output'
 STATIC_DIR = '/ai_biopsy/src'
 RESULT_DIR = '/ai_biopsy/src/ai_biopsy_src/result/'
 
-ALLOWED_EXTENSIONS = set(['jpg', 'png', 'tif', 'tiff'])
+ALLOWED_EXTENSIONS = set(['jpg', 'png', 'tif', 'tiff', 'dcm'])
 
 static_file_dir = os.path.join(STATIC_DIR, 'static')
 
@@ -103,10 +105,29 @@ def upload_image():
 
     # 3. Normalize images to jpeg format
     for image in glob.glob(os.path.join(request_dir, '*.*')):
-        img = cv2.imread(image)
-        os.remove(image)
-        filename = '%s.jpg' % os.path.splitext(image)[0]
-        cv2.imwrite(os.path.join(request_dir, filename), img)
+        filename = os.path.splitext(image)[0]
+        if os.path.splitext(image)[1] == '.dcm':
+            ds = pydicom.dcmread(image)
+            shape = ds.pixel_array.shape
+
+            # Convert to float to avoid overflow or underflow losses.
+            image_2d = ds.pixel_array.astype(float)
+
+            # Rescaling grey scale between 0-255
+            image_2d_scaled = (np.maximum(image_2d,0) / image_2d.max()) * 255.0
+
+            # Convert to uint
+            image_2d_scaled = np.uint8(image_2d_scaled)
+
+            # Write the PNG file
+            with open(os.path.join(request_dir, filename) + '.png' , 'wb') as png_file:
+                w = png.Writer(shape[1], shape[0], greyscale=True)
+                w.write(png_file, image_2d_scaled)
+        else:
+            img = cv2.imread(image)
+            os.remove(image)
+            filename = '%s.png' % filename
+            cv2.imwrite(os.path.join(request_dir, filename), img)
 
     # 4. Specify Output log
     output_filename = 'output_' + request_id + '.txt'

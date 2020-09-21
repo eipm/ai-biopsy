@@ -6,6 +6,8 @@ const baseApiUrl = 'api'
 let token = getCookie('ai-biopsy-auth');
 checkTokenAndRedirectIfEmpty();
 
+document.getElementById('year').innerHTML = new Date().getFullYear();
+
 setInterval(function(){
     checkTokenAndRedirectIfEmpty();
 }, 5000);
@@ -68,8 +70,8 @@ function average(array) {
 }
 
 function isAnImage(file) {
-    if (file && file.type) {
-        return file.type.startsWith('image/jpeg') || file.type.startsWith('image/png') || file.type.startsWith('image/tiff');
+    if (file && (file.type || file.name)) {
+        return file.type.startsWith('image/jpeg') || file.type.startsWith('image/png') || file.type.startsWith('image/tiff') || file.name.endsWith('.dcm');
     }
 
     return false;
@@ -198,6 +200,64 @@ function clearAllImageCards() {
     });
 };
 
+async function getDcmImage(file) {
+    const width = 256;
+    const height = 256;
+    let pixelData = null;
+
+    function str2ab(str) {
+        var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+        var bufView = new Uint16Array(buf);
+        var index = 0;
+        for (var i=0, strLen=str.length; i<strLen; i+=2) {
+            var lower = str.charCodeAt(i);
+            var upper = str.charCodeAt(i+1);
+            bufView[index] = lower + (upper <<8);
+            index++;
+        }
+        return bufView;
+    };
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
+    const base64 = await toBase64(file);
+    const base64PixelData = base64.substring(base64.indexOf('base64,') + 'base64,'.length);
+    const pixelDataAsString = atob(base64PixelData);
+    pixelData = str2ab(pixelDataAsString);
+
+    function getPixelData() {
+        return pixelData;
+    }
+
+    var image = {
+        imageId: file.name,
+        minPixelValue : 0,
+        maxPixelValue : 257,
+        slope: 1.0,
+        intercept: 0,
+        windowCenter : 127,
+        windowWidth : 256,
+        getPixelData: getPixelData,
+        rows: height,
+        columns: width,
+        height: height,
+        width: width,
+        color: false,
+        columnPixelSpacing: .8984375,
+        rowPixelSpacing: .8984375,
+        sizeInBytes: width * height * 2
+    };
+
+    return new Promise((resolve) => {
+        resolve(image);
+    });
+}
+
 function createImagesUIFromFiles(files, imagesPlaceholder) {
     if (files === null || files === undefined || imagesPlaceholder === null || imagesPlaceholder === undefined) {
         return;
@@ -209,9 +269,7 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
         imagePlaceholder.id = `image-card-${file.name}`;
         imagePlaceholder.innerHTML = `
             <div class="card image-container">
-                <div class="card-image">
-                    <img alt="${file.name}" width="330px" />
-                </div>
+                <div class="card-image" ></div>
                 <div class="card-file-name">${file.name}</div>
                 
                 <div class="loader"></div> 
@@ -227,8 +285,18 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
                 </div>
             </div>`;
         imagesPlaceholder.appendChild(imagePlaceholder);
+        const cardImage = imagePlaceholder.getElementsByClassName('card-image')[0];
 
-        const image = imagePlaceholder.getElementsByTagName('img')[0];
+        if (file.name.endsWith('.dcm')) {
+            cornerstone.enable(cardImage);
+            getDcmImage(file).then(function(image) {
+                cornerstone.displayImage(cardImage, image);
+            });
+        } else {
+            cardImage.innerHTML = `<img alt="${file.name}" width="330px" />`;
+        }
+
+        const image = cardImage.children[0];
         const reader = new FileReader();
         reader.onload = function (e) {
             image.setAttribute('src', e.target.result);

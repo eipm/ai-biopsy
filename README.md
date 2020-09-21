@@ -1,11 +1,10 @@
+<p align="center">
+    <img src="docs/images/logo.png" width="256">
+</p>
+
 # AI Biopsy
 
-Needs to be updated
-
-[![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-![AI Biopsy Logo](docs/images/logo.png)
+[![Python 3.7.9](https://img.shields.io/badge/python-3.7.9-blue.svg)](https://www.python.org/downloads/release/python-379/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## AI Biopsy Requirements
 

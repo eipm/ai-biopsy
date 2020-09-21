@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="assets/materialize.min.css">
         <link href="assets/font-material-icons.css" rel="stylesheet">
         <link href="assets/ai_biopsy.css" rel="stylesheet">
+        <script src="https://unpkg.com/cornerstone-core/dist/cornerstone.min.js"></script>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-53992417-18"></script>
         <script>
@@ -27,7 +28,7 @@
                     <label for="file-select" id="add-images-button" class="btn">
                         <i class="material-icons left">add</i>Add Images
                     </label>
-                    <input type="file" id="file-select" multiple="multiple" accept="image/jpeg, image/png, image/tiff" class="hidden" />
+                    <input type="file" id="file-select" multiple="multiple" class="hidden" />
                     <div id="error-message" class="error-message hidden">You can add up to 100 images</div>
                 </div >
 
@@ -53,8 +54,8 @@
             <div class="push"></div>
         </div>
         <footer>
-            <div>Copyright © 2019 Englander Institute for Precision Medicine</div>
-            <div>AI Biopsy Version 1.0.0</div>
+            <div>Copyright © <span id="year"></span> Englander Institute for Precision Medicine</div>
+            <div>AI Biopsy Version 1.1.0</div>
             <img alt="logo" class="footer-logo" src="assets/LOGO_ENGLANDER_2LINE_RGB.png">
          </footer>
 
