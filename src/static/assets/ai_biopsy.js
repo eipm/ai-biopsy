@@ -68,8 +68,8 @@ function average(array) {
 }
 
 function isAnImage(file) {
-    if (file && file.type) {
-        return file.type.startsWith('image/jpeg') || file.type.startsWith('image/png') || file.type.startsWith('image/tiff');
+    if (file && (file.type || file.name)) {
+        return file.type.startsWith('image/jpeg') || file.type.startsWith('image/png') || file.type.startsWith('image/tiff') || file.name.endsWith('.dcm');
     }
 
     return false;
