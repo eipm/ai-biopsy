@@ -1,18 +1,16 @@
-FROM python:3.6.8-stretch
+FROM python:3.7.9-buster
 #===============================#
 # Docker Image Configuration	#
 #===============================#
 LABEL vendor='Englander Institute for Precision Medicine' \
     description='AI Biopsy' \
-    maintainer='als2076@med.cornell.edu' \
-    base_image='python' \
-    base_image_version='3.6.8-stretch' \
-    base_image_SHA256='sha256:ab2670ec57d486f73e49e7352de6a80b6767e3c996c1c0d0c158f17ae6f2d113'
+    maintainer='als2076@med.cornell.edu'
 
 ENV APP_NAME='ai_biopsy' \
     TZ='US/Eastern' \
     AI_BIOPSY_SRC_DIR='/ai_biopsy/src/ai_biopsy_src' \
     PREDICT_DIR='/ai_biopsy/src/ai_biopsy_src/slim'
+
 ENV RESULT_DIR=${AI_BIOPSY}/result \
     PROCESS_DIR=${AI_BIOPSY}/process \
     PYTHONPATH=${PYTHONPATH}:${AI_BIOPSY}:${PREDICT_DIR}
