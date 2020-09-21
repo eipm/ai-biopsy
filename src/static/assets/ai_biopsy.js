@@ -211,9 +211,7 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
         imagePlaceholder.id = `image-card-${file.name}`;
         imagePlaceholder.innerHTML = `
             <div class="card image-container">
-                <div class="card-image">
-                    <img alt="${file.name}" width="330px" />
-                </div>
+                <div class="card-image" ></div>
                 <div class="card-file-name">${file.name}</div>
                 
                 <div class="loader"></div> 
@@ -229,6 +227,25 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
                 </div>
             </div>`;
         imagesPlaceholder.appendChild(imagePlaceholder);
+        const cardImage = imagePlaceholder.getElementsByClassName('card-image')[0];
+
+        if (file.name.endsWith('.dcm')) {
+            cornerstone.enable(cardImage);
+            cornerstone.loadImage(file.name).then(function(image) {
+                cornerstone.displayImage(cardImage, image);
+            });
+
+            // const imageId = 'example://1';
+            // const element = document.getElementById('dicomImage');
+            // cornerstone.enable(element);
+            // cornerstone.loadImage(imageId).then(function(image) {
+            //     cornerstone.displayImage(element, image);
+            // });
+
+
+        } else {
+            cardImage.innerHTML = `<img alt="${file.name}" width="330px" />`;
+        }
 
         const image = imagePlaceholder.getElementsByTagName('img')[0];
         const reader = new FileReader();
