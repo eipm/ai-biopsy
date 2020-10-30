@@ -2,7 +2,8 @@ FROM python:3.7.9-buster
 #===============================#
 # Docker Image Configuration	#
 #===============================#
-LABEL vendor='Englander Institute for Precision Medicine' \
+LABEL LABEL org.opencontainers.image.source='https://github.com/eipm/ai-biopsy' \
+    vendor='Englander Institute for Precision Medicine' \
     description='AI Biopsy' \
     maintainer='als2076@med.cornell.edu'
 
