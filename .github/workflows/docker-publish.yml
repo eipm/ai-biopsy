@@ -79,8 +79,8 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.EIPM_DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.EIPM_DOCKER_HUB_TOKEN }}
       
       - name: Push image to EIPM Docker Hub
         run: |
