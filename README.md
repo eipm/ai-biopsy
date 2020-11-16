@@ -74,8 +74,8 @@ To run the AI-biopsy framework please follow these steps:
 ```bash
 DOCKER_CONTAINER_NAME=ai_biopsy
 AI_BIOPSY_PORT=3002
-OUTPUT_DIR=$PWD/src/ai_biopsy_src/output/
-UPLOAD_DIR=$PWD/src/ai_biopsy_src/uploads/
+OUTPUT_DIR=$PWD/output/
+UPLOAD_DIR=$PWD/uploads/
 PROCESS1_DIR=$PWD/src/ai_biopsy_src/Model1_Cancer_Benign/process/
 RESULT1_DIR=$PWD/src/ai_biopsy_src/Model1_Cancer_Benign/result/
 PROCESS2_DIR=$PWD/src/ai_biopsy_src/Model2_High_Low/process/
