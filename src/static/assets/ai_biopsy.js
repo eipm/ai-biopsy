@@ -143,15 +143,26 @@ function postFormData(formData, baseApiUrl) {
             Object.keys(response).map(fileName => {
                 currentImages[fileName].result = response[fileName];
                 const card = document.getElementById(`image-card-${fileName}`);
-                const bar = card.getElementsByClassName('bar')[0];
-                const goodText = card.getElementsByClassName('good-text')[0];
-                const poorText = card.getElementsByClassName('poor-text')[0];
-                const goodPercentage = (response[fileName].aggresive * 100).toFixed(2);
-                const poorPercentage = (response[fileName].nonAggresive * 100).toFixed(2);
-                bar.setAttribute('style', `width:${goodPercentage}%;`);
-                bar.innerHTML = `&nbsp;`;
-                goodText.innerHTML = `${goodPercentage}%`;
-                poorText.innerHTML = `${poorPercentage}%`;
+                const bar1 = card.getElementsByClassName('bar')[0];
+                const goodText1 = card.getElementsByClassName('good-text1')[0];
+                const poorText1 = card.getElementsByClassName('poor-text1')[0];
+                const goodPercentage1 = (response[fileName].benign * 100).toFixed(2);
+                const poorPercentage1 = (response[fileName].cancer * 100).toFixed(2);
+                bar1.setAttribute('style', `width:${goodPercentage1}%;`);
+                bar1.innerHTML = `&nbsp;`;
+                goodText1.innerHTML = `${goodPercentage1}%`;
+                poorText1.innerHTML = `${poorPercentage1}%`;
+
+                const bar2 = card.getElementsByClassName('bar')[1];
+                const goodText2 = card.getElementsByClassName('good-text2')[0];
+                const poorText2 = card.getElementsByClassName('poor-text2')[0];
+                const goodPercentage2 = (response[fileName].low * 100).toFixed(2);
+                const poorPercentage2 = (response[fileName].high * 100).toFixed(2);
+                bar2.setAttribute('style', `width:${goodPercentage2}%;`);
+                bar2.innerHTML = `&nbsp;`;
+                goodText2.innerHTML = `${goodPercentage2}%`;
+                poorText2.innerHTML = `${poorPercentage2}%`;
+
                 const result = card.getElementsByClassName('results')[0];
                 result.classList.remove('hidden');
             });
@@ -280,8 +291,14 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
                     <div class="poor">
                         <div class="good bar"></div>
                     </div>
-                    <div class="legend-item"><div class="legend-marker good"></div>Aggresive: <span class="good-text"></span></div>
-                    <div class="legend-item"><div class="legend-marker poor"></div>Non Aggresive: <span class="poor-text"></span></div>
+                    <div class="legend-item"><div class="legend-marker good"></div>Benign: <span class="good-text1"></span></div>
+                    <div class="legend-item"><div class="legend-marker poor"></div>Cancer: <span class="poor-text1"></span></div>
+                    </br>
+                    <div class="poor">
+                        <div class="good bar"></div>
+                    </div>
+                    <div class="legend-item"><div class="legend-marker good"></div>Low Risk: <span class="good-text2"></span></div>
+                    <div class="legend-item"><div class="legend-marker poor"></div>High Risk: <span class="poor-text2"></span></div>
                 </div>
             </div>`;
         imagesPlaceholder.appendChild(imagePlaceholder);

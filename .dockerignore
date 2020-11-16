@@ -3,3 +3,10 @@ README.md
 data
 env
 .git
+.gitignore
+
+
+**/process/
+**/result/
+**/uploads/
+**/output/

@@ -74,18 +74,13 @@ To run the AI-biopsy framework please follow these steps:
 ```bash
 DOCKER_CONTAINER_NAME=ai_biopsy
 AI_BIOPSY_PORT=3002
-OUTPUT_DIR=/stork/data/ai_biopsy/output/
-UPLOAD_DIR=/stork/data/ai_biopsy/uploads/
-PROCESS_DIR=/stork/data/ai_biopsy/process/
-RESULT_DIR=/stork/data/ai_biopsy/result/
+OUTPUT_DIR=$PWD/src/ai_biopsy_src/output/
+UPLOAD_DIR=$PWD/src/ai_biopsy_src/uploads/
+PROCESS1_DIR=$PWD/src/ai_biopsy_src/Model1_Cancer_Benign/process/
+RESULT1_DIR=$PWD/src/ai_biopsy_src/Model1_Cancer_Benign/result/
+PROCESS2_DIR=$PWD/src/ai_biopsy_src/Model2_High_Low/process/
+RESULT2_DIR=$PWD/src/ai_biopsy_src/Model2_High_Low/process/
 AI_BIOPSY_TAG=latest
-```
-
-```bash
-OUTPUT_DIR=~/Documents/2.GitHub/eipm/ai-biopsy/data/output/
-UPLOAD_DIR=~/Documents/2.GitHub/eipm/ai-biopsy/data/uploads/
-PROCESS_DIR=~/Documents/2.GitHub/eipm/ai-biopsy/data/process/
-RESULT_DIR=~/Documents/2.GitHub/eipm/ai-biopsy/data/result/
 ```
 
 ### Run Docker Container
@@ -94,10 +89,12 @@ RESULT_DIR=~/Documents/2.GitHub/eipm/ai-biopsy/data/result/
 docker run -d --name ${DOCKER_CONTAINER_NAME} \
 --restart on-failure:5 \
 -p ${AI_BIOPSY_PORT}:80 \
--v ${OUTPUT_DIR}:/output \
--v ${UPLOAD_DIR}:/uploads \
--v ${PROCESS_DIR}:/ai_biopsy/src/ai_biopsy_src/process/:ro \
--v ${RESULT_DIR}:/ai_biopsy/src/ai_biopsy_src/result/:ro \
+-v ${OUTPUT_DIR}:/ai_biopsy/output \
+-v ${UPLOAD_DIR}:/ai_biopsy/uploads \
+-v ${PROCESS1_DIR}:/ai_biopsy/src/ai_biopsy_src/Model1_Cancer_Benign/process/:ro \
+-v ${RESULT1_DIR}:/ai_biopsy/src/ai_biopsy_src/Model1_Cancer_Benign/result/:ro \
+-v ${PROCESS2_DIR}:/ai_biopsy/src/ai_biopsy_src/Model2_High_Low/process/:ro \
+-v ${RESULT2_DIR}:/ai_biopsy/src/ai_biopsy_src/Model2_High_Low/result/:ro \
 --env USERS_DICT="{ 'user1': 'password1', 'user2': 'password2' }" \
 eipm/ai-biopsy:${AI_BIOPSY_TAG}
 ```

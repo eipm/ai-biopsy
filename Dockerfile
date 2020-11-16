@@ -10,11 +10,14 @@ LABEL org.opencontainers.image.source='https://github.com/eipm/ai-biopsy' \
 ENV APP_NAME='ai_biopsy' \
     TZ='US/Eastern' \
     AI_BIOPSY_SRC_DIR='/ai_biopsy/src/ai_biopsy_src' \
-    PREDICT_DIR='/ai_biopsy/src/ai_biopsy_src/slim'
+    PREDICT1_DIR='/ai_biopsy/src/ai_biopsy_src/Model1_Cancer_Benign/slim' \
+    PREDICT2_DIR='/ai_biopsy/src/ai_biopsy_src/Model2_High_Low/slim'
 
-ENV RESULT_DIR=${AI_BIOPSY}/result \
-    PROCESS_DIR=${AI_BIOPSY}/process \
-    PYTHONPATH=${PYTHONPATH}:${AI_BIOPSY}:${PREDICT_DIR}
+ENV RESULT1_DIR=${AI_BIOPSY}/Model1_Cancer_Benign/result \
+    PROCESS1_DIR=${AI_BIOPSY}/Model1_Cancer_Benign/process \
+    RESULT2_DIR=${AI_BIOPSY}/Model2_High_Low/result \
+    PROCESS2_DIR=${AI_BIOPSY}/Model2_High_Low/process \
+    PYTHONPATH=${PYTHONPATH}:${AI_BIOPSY}:${PREDICT1_DIR}:${PREDICT2_DIR}
 
 #===================================#
 # Install Prerequisites         	#
