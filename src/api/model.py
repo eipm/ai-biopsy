@@ -49,12 +49,7 @@ class Model:
         if not os.path.exists(request_output_dir):
           os.makedirs(request_output_dir)
 
-        output_filename = f'{self.name}.txt'
-        filePath = os.path.join(request_output_dir, output_filename)
-        # # Creates a new file
-        # with open(filePath, 'w') as fp:
-        #     pass
-        return filePath
+        return os.path.join(request_output_dir, f'{self.name}.txt')
 
     def __run_tensorflow(self, request_dir, output_file):
         model_folder_path = self.__get_model_folder_path()
