@@ -1,5 +1,5 @@
 // Env variables
-const maxImagesPermitted = 100;
+const maxImagesPermitted = 7;
 const baseApiUrl = 'api'
 // End Env variables
 
@@ -7,6 +7,9 @@ let token = getCookie('ai-biopsy-auth');
 checkTokenAndRedirectIfEmpty();
 
 document.getElementById('year').innerHTML = new Date().getFullYear();
+for (var element of document.getElementsByClassName('max-number-of-images')) {
+    element.innerHTML = `${maxImagesPermitted}`;
+}
 
 setInterval(function(){
     checkTokenAndRedirectIfEmpty();
