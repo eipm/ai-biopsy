@@ -4,10 +4,8 @@ from flask import Flask, jsonify, flash, request, redirect, url_for,send_from_di
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 import uuid as myuuid
-import csv
 import cv2
 import glob
-import ntpath
 import datetime
 import numpy as np
 import png, pydicom
@@ -15,19 +13,19 @@ from ast import literal_eval
 
 # Relative Imports
 from api.version import api_version
+from api.model import Model
 
 # Define Directories
-UPLOAD_DIR = '/uploads'
-OUTPUT_DIR = '/output'
-STATIC_DIR = '/ai_biopsy/src'
-RESULT_DIR = '/ai_biopsy/src/ai_biopsy_src/result/'
+MODELS = [
+    Model('Cancer_Benign', 'Model1_Cancer_Benign', 'cancer', 'benign'),
+    Model('High_Low', 'Model2_High_Low', 'high', 'low')]
 
 ALLOWED_EXTENSIONS = set(['jpg', 'png', 'tif', 'tiff', 'dcm'])
 
-static_file_dir = os.path.join(STATIC_DIR, 'static')
+static_file_dir = os.path.join(os.getcwd(), 'src/static')
+upload_dir = os.path.join(os.getcwd(), 'uploads')
 
 app = Flask(__name__)
-app.config['UPLOAD_DIR'] = UPLOAD_DIR
 app.config['SECRET_KEY'] = 'secret_key'
 app.config['CORS_HEADERS'] = 'Content-Type'
 CORS(app)
@@ -85,23 +83,19 @@ def upload_image():
 
     # 1. Create request directory
     request_id = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")
-    request_dir = (os.path.join(app.config['UPLOAD_DIR'], request_id))
+    request_dir = (os.path.join(upload_dir, request_id))
     if not os.path.exists(request_dir):
         os.makedirs(request_dir)
 
     response_dict = {}
     images_dict = {}
     # For each uploaded image
-    for image in request.files.getlist("image"):
+    for image in request.files.getlist('image'):
         # 2. Save Image
         filename = secure_filename(image.filename)
         image.save(os.path.join(request_dir, filename))
 
         images_dict[filename] = image.filename
-
-        # =============#
-        # Analyze Data #
-        # =============#
 
     # 3. Normalize images to jpeg format
     for image in glob.glob(os.path.join(request_dir, '*.*')):
@@ -129,31 +123,27 @@ def upload_image():
             filename = '%s.png' % filename
             cv2.imwrite(os.path.join(request_dir, filename), img)
 
-    # 4. Specify Output log
-    output_filename = 'output_' + request_id + '.txt'
-    output_file = os.path.join(OUTPUT_DIR, output_filename)
-
-    # 5. Run ai-biopsy
-    python_command='python3 ' + os.environ['PREDICT_DIR'] + '/predict.py v1 ' + RESULT_DIR + ' ' + request_dir + ' ' + output_file + ' 2'
-    print(python_command)
-    os.system(python_command)
-
-    # 6. Parse ai-biopsy Results
-    image_results = list(csv.reader(open(output_file, 'r', encoding='utf8'), delimiter='\t'))
-
-    # ==================#
-    # Send JSON Results #
-    # ==================#
-
-    for image_result in image_results:
-        filepath = ntpath.basename(image_result[0])
-        filename = os.path.splitext(filepath)[0]
-        for saved_file_name, initital_file_name in images_dict.items():
-            if saved_file_name.lower() in [("{}.{}".format(filename, ext)).lower() for ext in ALLOWED_EXTENSIONS]:
-                response_dict[initital_file_name] = { 'aggresive': image_result[1], 'nonAggresive': image_result[2] }
-                break
+    for model in MODELS:
+        model_result = model.get_model_results(request_id, request_dir)
+        write_model_results_in_response(response_dict, model, model_result, images_dict)
 
     return jsonify(response_dict), 200
+
+def write_model_results_in_response(response_dict, model, model_result, images_dict):
+    for image_result in model_result:
+        filepath = os.path.basename(image_result[0])
+        filename = os.path.splitext(filepath)[0]
+        ext = os.path.splitext(filepath)[1]
+        for saved_file_name, initital_file_name in images_dict.items():
+            if saved_file_name.lower() in [("{}.{}".format(filename, ext)).lower() for ext in ALLOWED_EXTENSIONS]:
+                obj = {}
+                if initital_file_name in response_dict:
+                    obj = response_dict[initital_file_name]
+                else:
+                    response_dict[initital_file_name] = obj
+                obj[model.first_value_name] = image_result[1]
+                obj[model.second_value_name] = image_result[2]
+                break
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)

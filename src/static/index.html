@@ -29,7 +29,7 @@
                         <i class="material-icons left">add</i>Add Images
                     </label>
                     <input type="file" id="file-select" multiple="multiple" class="hidden" />
-                    <div id="error-message" class="error-message hidden">You can add up to 100 images</div>
+                    <div id="error-message" class="error-message hidden">You can add up to <span class="max-number-of-images"></span> images</div>
                 </div >
 
                 <div class="margin10  inline-block align-top">
@@ -42,15 +42,18 @@
                 <div id="clear-all-button" class="btn disabled inline-block margin10 float-right">Clear All</div>
 
             </div>
+
+            <div id="results-placeholder" class="margin10 hidden">
+                Cumulative result: <strong></strong>
+            </div>
+
             <div>
                 <div id="imageCards-placeholder" class="margin10" ondrop="dropHandler(event);">
                 <div class="center info-text">Drag and drop your images here</div>
                 </div>
             </div>
             
-            <div id="results-placeholder" class="margin10 hidden">
-                Major vote result: <strong></strong>
-            </div>
+
             <div class="push"></div>
         </div>
         <footer>
@@ -59,6 +62,7 @@
             <img alt="logo" class="footer-logo" src="assets/LOGO_ENGLANDER_2LINE_RGB.png">
          </footer>
 
+        <script type="text/javascript" src="assets/materialize.min.js"></script>
         <script type="text/javascript" src="assets/ai_biopsy.js"></script>
     </body>
 </html>
