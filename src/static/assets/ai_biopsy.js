@@ -88,33 +88,35 @@ function getFormData(files) {
     return formData;
 };
 
-function calculateMajorVoteResult() {
+function calculateCumulativeResult() {
     const currentImagesLength = Object.keys(currentImages).length;
     if (currentImagesLength === 0) {
         return null;
     }
 
-    const goodResults = [], poorResults = [];
+    const cancerResults = [], highRiskResults = [];
     for (const x of Object.keys(currentImages)) {
-        if (Number(currentImages[x].result.Good) > Number(currentImages[x].result.Poor)) {
-            goodResults.push(currentImages[x]);
-        } else {
-            poorResults.push(currentImages[x])
+        if (Number(currentImages[x].result.cancer) > Number(currentImages[x].result.benign)) {
+            cancerResults.push(currentImages[x]);
+        }
+        if (Number(currentImages[x].result.high) > Number(currentImages[x].result.low)) {
+            highRiskResults.push(currentImages[x]);
         }
     }
 
-    let result = 'Unclear';
-    if (goodResults.length < currentImagesLength / 2) {
-        result = 'Poor';
-    } else if ((goodResults.length > currentImagesLength / 2)) {
-        result = 'Good';
-    } else {
-        const averageGood = average(goodResults.map(x => Number(x.result.Good)));
-        const averagePoor = average(poorResults.map(x => Number(x.result.Poor)));
-        if (averageGood > averagePoor) {
-            result = 'Good';
-        } else if  (averageGood < averagePoor) {
-            result = 'Poor';
+    const result = { model1: 'Undetermined', model2: ''};
+    if (cancerResults.length >= 1) {
+        result.model1 = 'Cancer';
+    } else if (Object.keys(currentImages).length >= 7) {
+        result.model1 = 'Benign';
+    }
+
+    if (result.model1 === 'Cancer') {
+        result.model2 = 'Undetermined Risk';
+        if (highRiskResults.length >= 2) {
+            result.model2 = 'High Risk';
+        } else if (Object.keys(currentImages).length >= 7) {
+            result.model2 = 'Low Risk';
         }
     }
 
@@ -123,7 +125,7 @@ function calculateMajorVoteResult() {
 
 function updateResultsUI(result) {
     if (result) {
-        results.getElementsByTagName('strong')[0].innerHTML = result;
+        results.getElementsByTagName('strong')[0].innerHTML = `${result.model1} ${result.model2 ? `(${result.model2})` : ''}`;
         results.classList.remove('hidden');
     } else {
         results.classList.add('hidden');
@@ -166,7 +168,7 @@ function postFormData(formData, baseApiUrl) {
                 const result = card.getElementsByClassName('results')[0];
                 result.classList.remove('hidden');
             });
-            // updateResultsUI(calculateMajorVoteResult());
+            updateResultsUI(calculateCumulativeResult());
         } else {
             alert('An error occurred!');
         }
@@ -183,7 +185,7 @@ function removeImageCard(imageName) {
     imagesPlaceholder.removeChild(card);
     delete currentImages[imageName];
     imageRemovedUpdateUI();
-    // updateResultsUI(calculateMajorVoteResult());
+    updateResultsUI(calculateCumulativeResult());
 };
 
 function imageRemovedUpdateUI() {
@@ -288,20 +290,30 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
                     <i class="material-icons">clear</i>
                 </div>
                 <div class="results card-content hidden">
-                    <div class="poor">
-                        <div class="good bar"></div>
-                    </div>
-                    <div class="legend-item"><div class="legend-marker good"></div>Benign: <span class="good-text1"></span></div>
-                    <div class="legend-item"><div class="legend-marker poor"></div>Cancer: <span class="poor-text1"></span></div>
-                    </br>
-                    <div class="poor">
-                        <div class="good bar"></div>
-                    </div>
-                    <div class="legend-item"><div class="legend-marker good"></div>Low Risk: <span class="good-text2"></span></div>
-                    <div class="legend-item"><div class="legend-marker poor"></div>High Risk: <span class="poor-text2"></span></div>
+                    <ul class="collapsible">
+                        <li>
+                            <div class="collapsible-header">Image Results</div>
+                            <div class="collapsible-body">
+                                <div class="poor">
+                                    <div class="good bar"></div>
+                                </div>
+                                <div class="legend-item"><div class="legend-marker good"></div>Benign: <span class="good-text1"></span></div>
+                                <div class="legend-item"><div class="legend-marker poor"></div>Cancer: <span class="poor-text1"></span></div>
+                                </br>
+                                <div class="poor">
+                                    <div class="good bar"></div>
+                                </div>
+                                <div class="legend-item"><div class="legend-marker good"></div>Low Risk: <span class="good-text2"></span></div>
+                                <div class="legend-item"><div class="legend-marker poor"></div>High Risk: <span class="poor-text2"></span></div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>`;
+
         imagesPlaceholder.appendChild(imagePlaceholder);
+        var elems = imagePlaceholder.querySelectorAll('.collapsible');
+        var instances = M.Collapsible.init(elems, undefined);
         const cardImage = imagePlaceholder.getElementsByClassName('card-image')[0];
 
         if (file.name.endsWith('.dcm')) {
@@ -396,5 +408,4 @@ if (imagesPlaceholder) {
     function unhighlight(e) {
         imagesPlaceholder.classList.remove('highlight');
     };
-    
 }

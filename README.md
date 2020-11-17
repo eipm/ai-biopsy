@@ -93,8 +93,8 @@ docker run -d --name ${DOCKER_CONTAINER_NAME} \
 -v ${UPLOAD_DIR}:/ai_biopsy/uploads \
 -v ${PROCESS1_DIR}:/ai_biopsy/src/ai_biopsy_src/Model1_Cancer_Benign/process/:ro \
 -v ${RESULT1_DIR}:/ai_biopsy/src/ai_biopsy_src/Model1_Cancer_Benign/result/:ro \
--v ${PROCESS2_DIR}:/ai_biopsy/src/ai_biopsy_src/Model2_High_Low/process/ \
--v ${RESULT2_DIR}:/ai_biopsy/src/ai_biopsy_src/Model2_High_Low/result/ \
+-v ${PROCESS2_DIR}:/ai_biopsy/src/ai_biopsy_src/Model2_High_Low/process/:ro \
+-v ${RESULT2_DIR}:/ai_biopsy/src/ai_biopsy_src/Model2_High_Low/result/:ro \
 --env USERS_DICT="{ 'user1': 'password1', 'user2': 'password2' }" \
 eipm/ai-biopsy:${AI_BIOPSY_TAG}
 ```
