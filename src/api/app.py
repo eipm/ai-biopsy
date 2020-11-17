@@ -17,8 +17,8 @@ from api.model import Model
 
 # Define Directories
 MODELS = [
-    Model('Cancer_Benign', 'Model1_Cancer_Benign', 'cancer', 'benign'),
-    Model('High_Low', 'Model2_High_Low', 'high', 'low')]
+    Model('Cancer_Benign', 'Model1_Cancer_Benign', 'benign', 'cancer'),
+    Model('High_Low', 'Model2_High_Low', 'low', 'high')]
 
 ALLOWED_EXTENSIONS = set(['jpg', 'png', 'tif', 'tiff', 'dcm'])
 
