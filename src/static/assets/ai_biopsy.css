@@ -185,3 +185,11 @@ footer {
     padding: 3px;
     display: inline-block;
 }
+
+#badges-explanation .badge {
+    float: left;
+}
+
+.margin-bottom-default {
+    margin-bottom: 20px;
+}
