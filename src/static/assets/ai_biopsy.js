@@ -92,13 +92,11 @@ function getFormData(files) {
 };
 
 function calculateCumulativeResult() {
-    const currentImagesLength = Object.keys(currentImages).length;
-    if (currentImagesLength === 0) {
-        return null;
-    }
+    const cancerResults = [];
+    const highRiskResults = [];
+    const currentImagesKeys = Object.keys(currentImages);
 
-    const cancerResults = [], highRiskResults = [];
-    for (const x of Object.keys(currentImages)) {
+    for (const x of currentImagesKeys) {
         if (Number(currentImages[x].result.cancer) > Number(currentImages[x].result.benign)) {
             cancerResults.push(currentImages[x]);
         }
@@ -107,32 +105,76 @@ function calculateCumulativeResult() {
         }
     }
 
-    const result = { model1: 'Undetermined', model2: ''};
-    if (cancerResults.length >= 1) {
-        result.model1 = 'Cancer';
-    } else if (Object.keys(currentImages).length >= 7) {
-        result.model1 = 'Benign';
-    }
-
-    if (result.model1 === 'Cancer') {
-        result.model2 = 'Undetermined Risk';
-        if (highRiskResults.length >= 2) {
-            result.model2 = 'High Risk';
-        } else if (Object.keys(currentImages).length >= 7) {
-            result.model2 = 'Low Risk';
+    const result = { model1: 'N/A', model2: 'N/A'};
+    if (currentImagesKeys.length) {
+        result.model1 = 'Undetermined';
+        if (cancerResults.length >= 1) {
+            result.model1 = 'Cancer';
+        } else if (currentImagesKeys.length >= 7) {
+            result.model1 = 'Benign';
+        }
+    
+        if (result.model1 === 'Cancer') {
+            result.model2 = 'Undetermined';
+            if (highRiskResults.length >= 2) {
+                result.model2 = 'High Risk';
+            } else if (currentImagesKeys.length >= 7) {
+                result.model2 = 'Low Risk';
+            }
         }
     }
 
     return result;
 };
 
+resultBadges = {
+    'N/A': { badge: '<span class="new badge" data-badge-caption>N/A</span>', description: 'Not applicable', group: 'Generic' },
+    'Undetermined': { badge: '<span class="new grey badge" data-badge-caption>Undetermined</span>', description: 'More images are required in order to make a decision.', group: 'Generic' },
+    'Cancer': { badge: '<span class="new red darken-4 badge" data-badge-caption>Cancer</span>', description: 'Cancer has been detected.', group: 'Prostate Tissue Assessment' },
+    'Benign': { badge: '<span class="new green badge" data-badge-caption>Benign</span>', description: 'No cancer has been detected.', group: 'Prostate Tissue Assessment' },
+    'High Risk': { badge: '<span class="new orange darken-4 badge" data-badge-caption>High Risk</span>', description: 'Cancer cells are poorly differentiated (grade group = 3, 4, and 5)', group: 'Risk Assessment' },
+    'Low Risk': { badge: '<span class="new orange badge" data-badge-caption>Low Risk</span>', description: 'Cancer cells are likely to grow slowly (grade group = 1 and 2)', group: 'Risk Assessment' },
+};
+
 function updateResultsUI(result) {
     if (result) {
-        results.getElementsByTagName('strong')[0].innerHTML = `${result.model1} ${result.model2 ? `(${result.model2})` : ''}`;
-        results.classList.remove('hidden');
-    } else {
-        results.classList.add('hidden');
+        const model1Result = document.getElementById('model1-result');
+        const model2Result = document.getElementById('model2-result');
+        if (model1Result && model2Result) {
+            model1Result.innerHTML = `<a class="waves-effect waves-light modal-trigger" href="#result-explanation-modal">${resultBadges[result.model1].badge}</a>`;
+            model2Result.innerHTML = `<a class="waves-effect waves-light modal-trigger" href="#result-explanation-modal">${resultBadges[result.model2].badge}</a>`;
+        }
     }
+};
+
+function populateExplanations() {
+    const badgesExplanationSection = document.getElementById('badges-explanation');
+    if (!badgesExplanationSection) {
+        return;
+    }
+
+    const badgesExplanation = {}
+    for (const key of Object.keys(resultBadges)) {
+        const group = resultBadges[key].group;
+        if (!badgesExplanation[group]) {
+            badgesExplanation[group] = [];
+        }
+
+        badgesExplanation[group].push(resultBadges[key]);
+    }
+
+    for (const key of Object.keys(badgesExplanation)) {
+        badgesExplanationSection.innerHTML += 
+        `<div class="margin-bottom-default"><h6>${key}</h6>${badgesExplanation[key].map(x => `<div class="margin10">${x.badge} - ${x.description}</div>`).join('')}</div>`;
+    }
+};
+
+function initializeExplanationsModal() {
+    populateExplanations();
+    document.addEventListener('DOMContentLoaded', function() {
+        const elements = document.querySelectorAll('.modal');
+        const instances = M.Modal.init(elements, undefined);
+    });
 };
 
 function postFormData(formData, baseApiUrl) {
@@ -378,6 +420,8 @@ const currentImages = {};
 const addImagesButton = document.getElementById('add-images-button');
 const results = document.getElementById('results-placeholder');
 const fileSelect = document.getElementById('file-select');
+
+updateResultsUI(calculateCumulativeResult());
 if (fileSelect) {
     fileSelect.value = '';
     fileSelect.addEventListener('change', function(e) {
@@ -412,3 +456,5 @@ if (imagesPlaceholder) {
         imagesPlaceholder.classList.remove('highlight');
     };
 }
+
+initializeExplanationsModal();

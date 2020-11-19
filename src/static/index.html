@@ -22,7 +22,7 @@
             <div class="header center">
                 <img src="assets/logo.png" alt="AI Biopsy logo" height="60px">
             </div>
-            <div class="block">
+            <div class="block float-right">
 
                 <div class="margin10 inline-block">
                     <label for="file-select" id="add-images-button" class="btn">
@@ -39,12 +39,24 @@
                     </a>
                 </div>
 
-                <div id="clear-all-button" class="btn disabled inline-block margin10 float-right">Clear All</div>
+                <div id="clear-all-button" class="btn disabled inline-block margin10">Clear All</div>
 
             </div>
 
-            <div id="results-placeholder" class="margin10 hidden">
-                Cumulative result: <strong></strong>
+            <div id="results-placeholder" class="margin10 inline-block">
+                <h6>Results</h6>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Prostate Tissue Assessment</td>
+                            <td id="model1-result"></td>
+                        </tr>
+                        <tr>
+                            <td>Risk Assesemnt</td>
+                            <td id="model2-result"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div>
@@ -61,6 +73,17 @@
             <div>AI Biopsy Version 1.1.0</div>
             <img alt="logo" class="footer-logo" src="assets/LOGO_ENGLANDER_2LINE_RGB.png">
          </footer>
+
+         <div id="result-explanation-modal" class="modal">
+            <div class="modal-content">
+              <h4>Results Explanation</h4>
+              <p id="badges-explanation"></p>
+              <sup>For accurate results, all images should be of the same patient.</sub>
+            </div>
+            <div class="modal-footer">
+              <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+          </div>
 
         <script type="text/javascript" src="assets/materialize.min.js"></script>
         <script type="text/javascript" src="assets/ai_biopsy.js"></script>
