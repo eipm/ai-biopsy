@@ -97,11 +97,13 @@ function calculateCumulativeResult() {
     const currentImagesKeys = Object.keys(currentImages);
 
     for (const x of currentImagesKeys) {
-        if (Number(currentImages[x].result.cancer) > Number(currentImages[x].result.benign)) {
-            cancerResults.push(currentImages[x]);
-        }
-        if (Number(currentImages[x].result.high) > Number(currentImages[x].result.low)) {
-            highRiskResults.push(currentImages[x]);
+        if (currentImages[x].result) {
+            if (Number(currentImages[x].result.cancer) > Number(currentImages[x].result.benign)) {
+                cancerResults.push(currentImages[x]);
+            }
+            if (Number(currentImages[x].result.high) > Number(currentImages[x].result.low)) {
+                highRiskResults.push(currentImages[x]);
+            }
         }
     }
 
