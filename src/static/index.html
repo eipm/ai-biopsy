@@ -1,91 +1,99 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8"/>
-        <title>AI Biopsy</title>
-        <link rel="stylesheet" href="assets/materialize.min.css">
-        <link href="assets/font-material-icons.css" rel="stylesheet">
-        <link href="assets/ai_biopsy.css" rel="stylesheet">
-        <script src="https://unpkg.com/cornerstone-core/dist/cornerstone.min.js"></script>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-53992417-18"></script>
-        <script>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AI Biopsy</title>
+    <link rel="stylesheet" href="assets/materialize.min.css">
+    <link href="assets/font-material-icons.css" rel="stylesheet">
+    <link href="assets/ai_biopsy.css" rel="stylesheet">
+    <script src="https://unpkg.com/cornerstone-core/dist/cornerstone.min.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-53992417-18"></script>
+    <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'UA-53992417-18');
-        </script>
-    </head>
-    <body>
-        <div class="wrapper">
-            <div class="header center">
-                <img src="assets/logo.png" alt="AI Biopsy logo" height="60px">
-            </div>
-            <div class="block float-right">
+    </script>
+</head>
 
-                <div class="margin10 inline-block">
-                    <label for="file-select" id="add-images-button" class="btn">
-                        <i class="material-icons left">add</i>Add Images
-                    </label>
-                    <input type="file" id="file-select" multiple="multiple" class="hidden" />
-                    <div id="error-message" class="error-message hidden">You can add up to <span class="max-number-of-images"></span> images</div>
-                </div >
-
-                <div class="margin10  inline-block align-top">
-                    <a href="https://www.dropbox.com/s/bpbjxau1hwxd7yh/test-images.zip?dl=1" class="btn" id="download-test-images">
-                        <i class="material-icons left">cloud_download</i>
-                        Download test images
-                    </a>
-                </div>
-
-                <div id="clear-all-button" class="btn disabled inline-block margin10">Clear All</div>
-
-            </div>
-
-            <div id="results-placeholder" class="margin10 inline-block">
-                <h6>Results</h6>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Prostate Tissue Assessment</td>
-                            <td id="model1-result"></td>
-                        </tr>
-                        <tr>
-                            <td>Risk Assesemnt</td>
-                            <td id="model2-result"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div>
-                <div id="imageCards-placeholder" class="margin10" ondrop="dropHandler(event);">
-                <div class="center info-text">Drag and drop your images here</div>
-                </div>
-            </div>
-            
-
-            <div class="push"></div>
+<body>
+    <div class="wrapper">
+        <div class="header center">
+            <img src="assets/logo.png" alt="AI Biopsy logo" height="60px">
         </div>
-        <footer>
-            <div>Copyright © <span id="year"></span> Englander Institute for Precision Medicine</div>
-            <div>AI Biopsy Version 1.1.0</div>
-            <img alt="logo" class="footer-logo" src="assets/LOGO_ENGLANDER_2LINE_RGB.png">
-         </footer>
+        <div class="block float-right">
 
-         <div id="result-explanation-modal" class="modal">
-            <div class="modal-content">
-              <h4>Results Explanation</h4>
-              <p id="badges-explanation"></p>
-              <sup>For accurate results, all images should be of the same patient.</sub>
+            <div class="margin10 inline-block">
+                <label for="file-select" id="add-images-button" class="btn">
+                    <i class="material-icons left">add</i>Add Images
+                </label>
+                <input type="file" id="file-select" multiple="multiple" class="hidden" />
+                <div id="error-message" class="error-message hidden">You can add up to <span
+                        class="max-number-of-images"></span> images</div>
             </div>
-            <div class="modal-footer">
-              <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-            </div>
-          </div>
 
-        <script type="text/javascript" src="assets/materialize.min.js"></script>
-        <script type="text/javascript" src="assets/ai_biopsy.js"></script>
-    </body>
+            <div class="margin10  inline-block align-top">
+                <a href="https://www.dropbox.com/s/xln3llxb35ab2dw/AI-Biopsy%20Test%20Images.zip?dl=1" class="btn"
+                    id="download-test-images">
+                    <i class="material-icons left">cloud_download</i>
+                    Download test images
+                </a>
+            </div>
+
+            <div id="clear-all-button" class="btn disabled inline-block margin10">Clear All</div>
+
+        </div>
+
+        <div id="results-placeholder" class="margin10 inline-block">
+            <h6>Results</h6>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Prostate Tissue Assessment</td>
+                        <td id="model1-result"></td>
+                    </tr>
+                    <tr>
+                        <td>Risk Assesemnt</td>
+                        <td id="model2-result"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <div id="imageCards-placeholder" class="margin10" ondrop="dropHandler(event);">
+                <div class="center info-text">Drag and drop your images here</div>
+            </div>
+        </div>
+
+
+        <div class="push"></div>
+    </div>
+    <footer>
+        <div>Copyright © <span id="year"></span> Englander Institute for Precision Medicine</div>
+        <div>AI Biopsy Version 1.1.0</div>
+        <img alt="logo" class="footer-logo" src="assets/LOGO_ENGLANDER_2LINE_RGB.png">
+    </footer>
+
+    <div id="result-explanation-modal" class="modal">
+        <div class="modal-content">
+            <h4>Results Explanation</h4>
+            <p id="badges-explanation"></p>
+            <sup>For accurate results, all images should be of the same patient.</sub>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="assets/materialize.min.js"></script>
+    <script type="text/javascript" src="assets/ai_biopsy.js"></script>
+</body>
+
 </html>
