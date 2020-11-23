@@ -130,12 +130,12 @@ function calculateCumulativeResult() {
 };
 
 resultBadges = {
-    'N/A': { badge: '<span class="new badge" data-badge-caption>N/A</span>', description: 'Not applicable', group: 'Generic' },
-    'Undetermined': { badge: '<span class="new grey badge" data-badge-caption>Undetermined</span>', description: 'More images are required in order to make a decision.', group: 'Generic' },
-    'Cancer': { badge: '<span class="new red darken-4 badge" data-badge-caption>Cancer</span>', description: 'Cancer has been detected.', group: 'Prostate Tissue Assessment' },
-    'Benign': { badge: '<span class="new green badge" data-badge-caption>Benign</span>', description: 'No cancer has been detected.', group: 'Prostate Tissue Assessment' },
-    'High Risk': { badge: '<span class="new orange darken-4 badge" data-badge-caption>High Risk</span>', description: 'Cancer cells are poorly differentiated (grade group = 3, 4, and 5)', group: 'Risk Assessment' },
-    'Low Risk': { badge: '<span class="new orange badge" data-badge-caption>Low Risk</span>', description: 'Cancer cells are likely to grow slowly (grade group = 1 and 2)', group: 'Risk Assessment' },
+    'N/A': { badge: '<span class="new badge" data-badge-caption>N/A</span>', colorClass: '', description: 'Not applicable', group: 'Generic' },
+    'Undetermined': { badge: '<span class="new grey badge" data-badge-caption>Undetermined</span>', colorClass: 'grey', description: 'More images are required in order to make a decision.', group: 'Generic' },
+    'Cancer': { badge: '<span class="new red darken-4 badge" data-badge-caption>Cancer</span>', colorClass: 'red darken-4', description: 'Cancer has been detected.', group: 'Prostate Tissue Assessment' },
+    'Benign': { badge: '<span class="new green badge" data-badge-caption>Benign</span>', colorClass: 'green', description: 'No cancer has been detected.', group: 'Prostate Tissue Assessment' },
+    'High Risk': { badge: '<span class="new orange darken-4 badge" data-badge-caption>High Risk</span>', colorClass: 'orange darken-4', description: 'Cancer cells are poorly differentiated (grade group = 3, 4, and 5)', group: 'Risk Assessment' },
+    'Low Risk': { badge: '<span class="new orange badge" data-badge-caption>Low Risk</span>', colorClass: 'orange', description: 'Cancer cells are likely to grow slowly (grade group = 1 and 2)', group: 'Risk Assessment' },
 };
 
 function updateResultsUI(result) {
@@ -341,17 +341,17 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
                         <li>
                             <div class="collapsible-header">Image Results</div>
                             <div class="collapsible-body">
-                                <div class="poor">
-                                    <div class="good bar"></div>
+                                <div class="${resultBadges.Cancer.colorClass}">
+                                    <div class="${resultBadges.Benign.colorClass} bar"></div>
                                 </div>
-                                <div class="legend-item"><div class="legend-marker good"></div>Benign: <span class="good-text1"></span></div>
-                                <div class="legend-item"><div class="legend-marker poor"></div>Cancer: <span class="poor-text1"></span></div>
+                                <div class="legend-item"><div class="legend-marker ${resultBadges.Benign.colorClass}"></div>Benign: <span class="good-text1"></span></div>
+                                <div class="legend-item"><div class="legend-marker ${resultBadges.Cancer.colorClass}"></div>Cancer: <span class="poor-text1"></span></div>
                                 </br>
-                                <div class="poor">
-                                    <div class="good bar"></div>
+                                <div class="${resultBadges['High Risk'].colorClass}">
+                                    <div class="${resultBadges['Low Risk'].colorClass} bar"></div>
                                 </div>
-                                <div class="legend-item"><div class="legend-marker good"></div>Low Risk: <span class="good-text2"></span></div>
-                                <div class="legend-item"><div class="legend-marker poor"></div>High Risk: <span class="poor-text2"></span></div>
+                                <div class="legend-item"><div class="legend-marker ${resultBadges['Low Risk'].colorClass}"></div>Low Risk: <span class="good-text2"></span></div>
+                                <div class="legend-item"><div class="legend-marker ${resultBadges['High Risk'].colorClass}"></div>High Risk: <span class="poor-text2"></span></div>
                             </div>
                         </li>
                     </ul>
