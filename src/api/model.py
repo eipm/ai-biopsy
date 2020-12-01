@@ -50,12 +50,6 @@ class Model:
 
     def __get_results_from_output_file(self, output_file):
         return list(csv.reader(open(output_file, 'r', encoding='utf8'), delimiter='\t'))
-    
-    def __get_cam_images_from_directory(self, dir: str):
-        self.__get_files_from_directory(dir)
-        
-    def __get_files_from_directory(self, dir: str) -> List[str]:
-        return os.listdir(dir)
 
     def __get_model_folder_path(self) -> str:
         return os.path.join(self.__models_dir, self.path)
