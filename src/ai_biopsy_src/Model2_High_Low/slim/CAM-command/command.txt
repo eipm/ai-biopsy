@@ -1,1 +1,0 @@
-python CAM.py v1 ../result/ ../../Images/test CAMed_img/ 2 model.ckpt-10000 InceptionV1/Logits/Conv2d_0c_1x1/weights Mixed_5c
