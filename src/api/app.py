@@ -10,10 +10,12 @@ import datetime
 import numpy as np
 import png, pydicom
 from ast import literal_eval
+import base64
 
 # Relative Imports
 from api.version import api_version
 from api.model import Model
+from api.model_process_result import ModelProcessResult
 
 # Define Directories
 MODELS = [
@@ -129,9 +131,9 @@ def upload_image():
 
     return jsonify(response_dict), 200
 
-def write_model_results_in_response(response_dict, model, model_result, images_dict):
-    for image_result in model_result:
-        filepath = os.path.basename(image_result[0])
+def write_model_results_in_response(response_dict, model: Model, model_result: ModelProcessResult, images_dict) -> None:
+    for prediction in model_result.predictions:
+        filepath = os.path.basename(prediction[0])
         filename = os.path.splitext(filepath)[0]
         ext = os.path.splitext(filepath)[1]
         for saved_file_name, initital_file_name in images_dict.items():
@@ -141,9 +143,16 @@ def write_model_results_in_response(response_dict, model, model_result, images_d
                     obj = response_dict[initital_file_name]
                 else:
                     response_dict[initital_file_name] = obj
-                obj[model.first_value_name] = image_result[1]
-                obj[model.second_value_name] = image_result[2]
+                obj[model.first_value_name] = prediction[1]
+                obj[model.second_value_name] = prediction[2]
+                cam_image = next(x for x in model_result.images if x.endswith(f'{filename}_CAM.png'))
+                if cam_image:
+                    obj[f'{model.name}_cam.png'] = get_base64_png(cam_image).decode("utf-8")
                 break
+
+def get_base64_png(image_path: str):
+    with open(image_path, "rb") as image:
+        return base64.b64encode(image.read())
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)

@@ -193,3 +193,7 @@ footer {
 .margin-bottom-default {
     margin-bottom: 20px;
 }
+
+.font-size-x-small {
+    font-size: x-small;
+}
