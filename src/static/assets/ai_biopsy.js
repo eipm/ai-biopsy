@@ -195,22 +195,27 @@ function postFormData(formData, baseApiUrl) {
                 const bar1 = card.getElementsByClassName('bar')[0];
                 const goodText1 = card.getElementsByClassName('good-text1')[0];
                 const poorText1 = card.getElementsByClassName('poor-text1')[0];
+                const cam_image1 = card.getElementsByClassName('img1')[0];
                 const goodPercentage1 = (response[fileName].benign * 100).toFixed(2);
                 const poorPercentage1 = (response[fileName].cancer * 100).toFixed(2);
                 bar1.setAttribute('style', `width:${goodPercentage1}%;`);
                 bar1.innerHTML = `&nbsp;`;
                 goodText1.innerHTML = `${goodPercentage1}%`;
                 poorText1.innerHTML = `${poorPercentage1}%`;
+                cam_image1.src = `data:image/png;base64,${response[fileName]["Cancer_Benign_cam.png"]}`;
+
 
                 const bar2 = card.getElementsByClassName('bar')[1];
                 const goodText2 = card.getElementsByClassName('good-text2')[0];
                 const poorText2 = card.getElementsByClassName('poor-text2')[0];
+                const cam_image2 = card.getElementsByClassName('img2')[0];
                 const goodPercentage2 = (response[fileName].low * 100).toFixed(2);
                 const poorPercentage2 = (response[fileName].high * 100).toFixed(2);
                 bar2.setAttribute('style', `width:${goodPercentage2}%;`);
                 bar2.innerHTML = `&nbsp;`;
                 goodText2.innerHTML = `${goodPercentage2}%`;
                 poorText2.innerHTML = `${poorPercentage2}%`;
+                cam_image2.src = `data:image/png;base64,${response[fileName]["High_Low_cam.png"]}`;
 
                 const result = card.getElementsByClassName('results')[0];
                 result.classList.remove('hidden');
@@ -346,12 +351,20 @@ function createImagesUIFromFiles(files, imagesPlaceholder) {
                                 </div>
                                 <div class="legend-item"><div class="legend-marker ${resultBadges.Benign.colorClass}"></div>Benign: <span class="good-text1"></span></div>
                                 <div class="legend-item"><div class="legend-marker ${resultBadges.Cancer.colorClass}"></div>Cancer: <span class="poor-text1"></span></div>
+                                <div class="legend-item">
+                                    <img alt="${file.name}_cam" class="img1"/>
+                                    <div class="font-size-x-small">Warm color (red) illustrate features with higher weight.</figcaption>
+                                </div>
                                 </br>
                                 <div class="${resultBadges['High Risk'].colorClass}">
                                     <div class="${resultBadges['Low Risk'].colorClass} bar"></div>
                                 </div>
                                 <div class="legend-item"><div class="legend-marker ${resultBadges['Low Risk'].colorClass}"></div>Low Risk: <span class="good-text2"></span></div>
                                 <div class="legend-item"><div class="legend-marker ${resultBadges['High Risk'].colorClass}"></div>High Risk: <span class="poor-text2"></span></div>
+                                <div class="legend-item">
+                                    <img alt="${file.name}_cam" class="img2" />
+                                    <div class="font-size-x-small">Cold color (blue) illustrate features with higher weight.</figcaption>
+                                </div>
                             </div>
                         </li>
                     </ul>
