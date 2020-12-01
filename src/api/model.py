@@ -1,6 +1,8 @@
 import os
 import csv
 import logging
+from typing import List, Type
+from api.model_process_result import ModelProcessResult
 
 OUTPUT_DIR = 'output'
 MODELS_DIR = 'src/ai_biopsy_src'
@@ -37,33 +39,45 @@ class Model:
     def __models_dir(self):
         return os.path.join(os.getcwd(), MODELS_DIR)
 
-    def get_model_results(self, request_id, request_dir):
+    def get_model_results(self, request_id: str, request_dir: str) -> Type[ModelProcessResult]:
         request_output_dir = self.__get_request_output_folder_path(request_id)
         output_file = os.path.join(request_output_dir, self.__get_output_file())
+        cam_output_folder = self.__get_cam_output_folder_path(request_output_dir)
         self.__run_tensorflow(request_dir, request_output_dir)
-        return list(csv.reader(open(output_file, 'r', encoding='utf8'), delimiter='\t'))
+        predictions = self.__get_results_from_output_file(output_file)
+        images = [os.path.join(cam_output_folder , x) for x in os.listdir(cam_output_folder) if x.endswith('_CAM.png')]
+        return ModelProcessResult(predictions, images)
 
-    def __get_model_folder_path(self):
+    def __get_results_from_output_file(self, output_file):
+        return list(csv.reader(open(output_file, 'r', encoding='utf8'), delimiter='\t'))
+    
+    def __get_cam_images_from_directory(self, dir: str):
+        self.__get_files_from_directory(dir)
+        
+    def __get_files_from_directory(self, dir: str) -> List[str]:
+        return os.listdir(dir)
+
+    def __get_model_folder_path(self) -> str:
         return os.path.join(self.__models_dir, self.path)
 
-    def __get_output_file(self):
+    def __get_output_file(self) -> str:
         return f'{self.name}.txt'
 
-    def __get_request_output_folder_path(self, request_id):
+    def __get_request_output_folder_path(self, request_id: str) -> str:
         dir = os.path.join(self.__output_dir, request_id)
         if not os.path.exists(dir):
             os.makedirs(dir)
 
         return dir
 
-    def __get_cam_output_folder_path(self, request_output_dir):
+    def __get_cam_output_folder_path(self, request_output_dir: str) -> str:
         dir = os.path.join(request_output_dir, f'{self.name}_{CAM_DIR}')
         if not os.path.exists(dir):
             os.makedirs(dir)
 
         return dir
 
-    def __run_tensorflow(self, request_dir, request_output_dir):
+    def __run_tensorflow(self, request_dir: str, request_output_dir: str) -> None:
         model_folder_path = self.__get_model_folder_path()
         predict_dir = os.path.join(model_folder_path, 'slim')
         result_dir = os.path.join(model_folder_path, 'result')
