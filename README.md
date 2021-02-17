@@ -8,12 +8,9 @@ Source code for manuscript:
 
 [![medRxiv badge](https://zenodo.org/badge/doi/10.1101/2019.12.16.19015057.svg)](https://doi.org/10.1101/2019.12.16.19015057) ⬅️ read the preprint here
 
-
 <p align="center">
     <img src="docs/images/logo.png" width="256">
 </p>
-
-# AI Biopsy
 
 [![Actions Status](https://github.com/eipm/ai-biopsy/workflows/Docker/badge.svg)](https://github.com/eipm/ai-biopsy/actions) [![Github](https://img.shields.io/badge/github-1.2.0-green?style=flat&logo=github)](https://github.com/eipm/ai-biopsy) [![EIPM Docker Hub](https://img.shields.io/badge/EIPM%20docker%20hub-1.2.0-blue?style=flat&logo=docker)](https://hub.docker.com/repository/docker/eipm/ai-biopsy) [![GitHub Container Registry](https://img.shields.io/badge/GitHub%20Container%20Registry-1.2.0-blue?style=flat&logo=docker)](https://github.com/orgs/eipm/packages/container/package/ai-biopsy) [![Python 3.7.9](https://img.shields.io/badge/python-3.7.9-blue.svg)](https://www.python.org/downloads/release/python-379/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -120,3 +117,4 @@ Where:
 - **${RESULT_DIR}**: Required directory from ML training.
 - **${USERS_DICT}**: The users credentials dictionary to authenticate.
 - **${AI_BIOPSY_TAG}**: The AI Biopsy Version to deploy.
+`
