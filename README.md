@@ -1,3 +1,14 @@
+# AI Biopsy
+
+Source code for manuscript:
+
+"***Biopsy-free prediction of prostate cancer aggressiveness using deep learning and radiology imaging***"
+
+[Posted on medRxiv](https://www.medrxiv.org/content/10.1101/2019.12.16.19015057v1), 12/19/2019: https://doi.org/10.1101/2019.12.16.19015057
+
+[![medRxiv badge](https://zenodo.org/badge/doi/10.1101/2019.12.16.19015057.svg)](https://doi.org/10.1101/2019.12.16.19015057) ⬅️ read the preprint here
+
+
 <p align="center">
     <img src="docs/images/logo.png" width="256">
 </p>
