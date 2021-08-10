@@ -30,6 +30,7 @@ upload_dir = os.path.join(os.getcwd(), 'uploads')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1000 * 1000
 CORS(app)
 
 users_dict = literal_eval(os.environ['USERS_DICT'])
