@@ -33,7 +33,7 @@ termcolor==1.1.0
 urllib3==1.25.10
 virtualenv==20.0.31
 Werkzeug==1.0.1
-opencv-python==4.0.0.21
+opencv-python==4.1.1.26
 matplotlib==3.3.2
 pydicom==2.0.0
 pypng==0.0.20
