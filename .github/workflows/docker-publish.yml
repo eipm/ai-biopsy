@@ -5,6 +5,7 @@ on:
     # Publish `main` as Docker `latest` image.
     branches:
       - main
+      - develop
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -18,11 +19,9 @@ env:
   IMAGE_NAME: ai-biopsy
 
 jobs:
-
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
-
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
@@ -33,7 +32,7 @@ jobs:
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
 
       - name: Log into GitHub Container Registry
-      # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
+        # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login https://ghcr.io -u ${{ secrets.GHCR_SVC_ACCOUNT }} --password-stdin
 
       - name: Push image to GitHub Container Registry
@@ -51,6 +50,7 @@ jobs:
 
           # Use Docker `latest` tag convention
           [ "$VERSION" == "main" ] && VERSION=latest
+          [ "$VERSION" == "develop" ] && VERSION=develop
 
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
@@ -63,7 +63,7 @@ jobs:
         with:
           username: ${{ secrets.EIPM_DOCKER_HUB_USERNAME }}
           password: ${{ secrets.EIPM_DOCKER_HUB_TOKEN }}
-      
+
       - name: Push image to EIPM Docker Hub
         run: |
           IMAGE_ID=eipm/$IMAGE_NAME
@@ -79,6 +79,7 @@ jobs:
 
           # Use Docker `latest` tag convention
           [ "$VERSION" == "main" ] && VERSION=latest
+          [ "$VERSION" == "develop" ] && VERSION=develop
 
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
